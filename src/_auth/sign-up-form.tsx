@@ -8,6 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -15,9 +16,14 @@ import { SignUpValidation } from "@/lib/validations";
 import Loader from "@/components/shared/loader";
 import { Link } from "react-router-dom";
 import { createUserAccount } from "@/lib/appwrite/api";
+import { useCreateUserAccountMutation } from "@/lib/react-query/queries-and-mutations";
 
 const SignUpForm = () => {
+  const { toast } = useToast();
   const isLoading = true;
+
+  const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } =
+    useCreateUserAccountMutation();
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
@@ -35,7 +41,14 @@ const SignUpForm = () => {
     // ✅ This will be type-safe and validated.
     // create the user .
     const newUser = createUserAccount(values);
+    if (!newUser) {
+      return toast({
+        title: "Sign up failed, Please try again.",
+      });
+    }
     console.log(newUser);
+
+    // const session = signInAccount();
   }
   return (
     <Form {...form}>
