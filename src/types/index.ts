@@ -54,3 +54,12 @@ export interface UserProps {
   imageUrl: string;
   username?: string;
 }
+
+export interface IContextType {
+  user: IUser;
+  isLoading: boolean;
+  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  checkAuthUser: () => Promise<boolean>;
+}

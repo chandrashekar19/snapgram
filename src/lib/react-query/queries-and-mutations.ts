@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { createUserAccount, signInAccount } from "../appwrite/api";
 
-export const useCreateUserAccountMutation = () => {
+export const useCreateUserAccount = () => {
   return useMutation({
     mutationFn: (user: INewUser) => createUserAccount(user),
   });
