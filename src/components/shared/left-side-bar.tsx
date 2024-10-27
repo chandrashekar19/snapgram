@@ -3,7 +3,7 @@ import { useUserContext } from "@/contexts/auth-context";
 import { INavLink } from "@/types";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
-import { useSignOutAccount } from "@/lib/react-query/queries-and-mutations";
+import { useSignOutAccount } from "@/lib/react-query/queries";
 
 const LeftSideBar = () => {
   const { user } = useUserContext();

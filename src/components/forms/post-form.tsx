@@ -1,7 +1,6 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -9,60 +8,63 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
 import { z } from "zod";
-
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
-});
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/file-uploader";
+import { PostValidation } from "@/lib/validations";
+import { Models } from "appwrite";
+import { useCreatePost } from "@/lib/react-query/queries";
+import { useUserContext } from "@/contexts/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
-
-export function ProfileForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  });
-
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+interface PostFormProps {
+  post?: Models.Document;
 }
 
-const PostForm = () => {
+const PostForm = ({ post }: PostFormProps) => {
+  const { mutateAsync: createPost, isPending: isLoadingCreate } =
+    useCreatePost();
+
+  const { user } = useUserContext();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof PostValidation>>({
+    resolver: zodResolver(PostValidation),
     defaultValues: {
-      username: "",
+      caption: post ? post?.caption : "",
+      file: [],
+      location: post ? post?.location : "",
+      tags: post ? post.tags.join(",") : "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  const PostSubmit = async (values: z.infer<typeof PostValidation>) => {
+    // ACTION = CREATE
+    const newPost = await createPost({
+      ...values,
+      userId: user.id,
+    });
+
+    if (!newPost) {
+      toast({
+        title: "Please try again",
+      });
+    }
+
+    navigate("/");
+
     console.log(values);
-  }
+  };
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(PostSubmit)}
         className="flex flex-col gap-9 w-full max-w-5xl"
       >
         <FormField
@@ -104,7 +106,7 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Location</FormLabel>
               <FormControl>
-                <Input type="text" className="shad-input" />
+                <Input type="text" className="shad-input" {...field} />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
@@ -123,6 +125,7 @@ const PostForm = () => {
                   type="text"
                   className="shad-input"
                   placeholder="Js, React, NextJS "
+                  {...field}
                 />
               </FormControl>
               <FormMessage className="shad-form_message" />

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { SignInValidation } from "@/lib/validations";
 import Loader from "@/components/shared/loader";
 import { Link, useNavigate } from "react-router-dom";
-import { useSignInAccount } from "@/lib/react-query/queries-and-mutations";
+import { useSignInAccount } from "@/lib/react-query/queries";
 import { useUserContext } from "@/contexts/auth-context";
 
 const SigninForm = () => {

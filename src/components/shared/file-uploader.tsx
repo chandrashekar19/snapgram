@@ -8,13 +8,17 @@ interface FileUplodaderProps {
 }
 
 const FileUploader = ({ fieldChange, mediaUrl }: FileUplodaderProps) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [fileUrl, setFileUrl] = useState("");
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    setFiles(acceptedFiles);
-    fieldChange(acceptedFiles);
-    setFileUrl(URL.createObjectURL(acceptedFiles[0]));
-  }, []);
+  const [file, setFile] = useState<File[]>([]);
+  const [fileUrl, setFileUrl] = useState(mediaUrl);
+
+  const onDrop = useCallback(
+    (acceptedFiles: FileWithPath[]) => {
+      setFile(acceptedFiles);
+      fieldChange(acceptedFiles);
+      setFileUrl(URL.createObjectURL(acceptedFiles[0]));
+    },
+    [file]
+  );
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
@@ -28,10 +32,12 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUplodaderProps) => {
     >
       <input {...getInputProps()} />
       {fileUrl ? (
-        <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
-          <img src={fileUrl} alt="image" className="file_uploader-img" />
-          <p>Click or drag photos to replace</p>
-        </div>
+        <>
+          <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
+            <img src={fileUrl} alt="image" className="file_uploader-img" />
+          </div>
+          <p className="file_uploader-label">Click or drag photos to replace</p>
+        </>
       ) : (
         <div className="file__uploader-box">
           <img
