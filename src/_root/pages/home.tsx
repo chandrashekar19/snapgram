@@ -1,7 +1,7 @@
 import Loader from "@/components/shared/loader";
 import PostCard from "@/components/shared/post-card";
 import UserCard from "@/components/shared/user-card";
-import { useGetRecentPosts } from "@/lib/react-query/queries";
+import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
 import { Models } from "appwrite";
 
 // import { useToast } from "@/components/ui/use-toast";

@@ -7,6 +7,7 @@ import {
 import { checkIsLiked } from "@/lib/utils";
 import { Models } from "appwrite";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface PostStatsProps {
   post: Models.Document;
@@ -17,6 +18,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const likesList = post.likes.map((user: Models.Document) => user.$id);
   const [likes, setLikes] = useState(likesList);
   const [isSaved, setIsSaved] = useState(false);
+  const location = useLocation();
 
   const { mutate: likePost } = useLikePost();
   const { mutate: savePost } = useSavePost();
@@ -27,6 +29,8 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const savedPostRecord = currentUser?.save.find(
     (record: Models.Document) => record.post.$id === post.$id
   );
+
+  // !! it  checks whether there is a truthy value if there is a truthy value make it a falsy value  if it is a falsy it makes truthy.
 
   useEffect(() => {
     setIsSaved(!!savedPostRecord);
@@ -63,8 +67,14 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     setIsSaved(true);
   };
 
+  const containerStyles = location.pathname.startsWith("/profile")
+    ? "w-full"
+    : "";
+
   return (
-    <div className="flex justify-between items-center z-10">
+    <div
+      className={`flex justify-between items-center z-20 ${containerStyles}`}
+    >
       <div className="flex gap-2 mr-5">
         <img
           src={`${

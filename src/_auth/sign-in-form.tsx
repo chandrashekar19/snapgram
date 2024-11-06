@@ -35,44 +35,24 @@ const SigninForm = () => {
   const { mutateAsync: signInAccount, isPending: isSigningInUser } =
     useSignInAccount();
 
-  // Handler
-  const handleSignIn = async (user: z.infer<typeof SignInValidation>) => {
-    // console.log("we are in");
-    try {
-      const session = await signInAccount({
-        email: user.email,
-        password: user.password,
-      });
+  const handleSignin = async (user: z.infer<typeof SignInValidation>) => {
+    const session = await signInAccount(user);
 
-      // console.log({ session });
+    if (!session) {
+      toast({ title: "Login failed. Please try again." });
 
-      if (!session) {
-        toast({
-          title: "Something went wrong. Please login with your new account",
-        });
+      return;
+    }
 
-        navigate("/sign-in");
+    const isLoggedIn = await checkAuthUser();
 
-        return;
-      }
+    if (isLoggedIn) {
+      form.reset();
 
-      const isLoggedIn = await checkAuthUser();
-
-      // console.log({ isLoggedIn });
-
-      if (isLoggedIn) {
-        form.reset();
-
-        // console.log("NAVIGATING");
-
-        navigate("/");
-      } else {
-        toast({ title: "Login failed. Please try again." });
-
-        return;
-      }
-    } catch (error) {
-      console.log({ error });
+      navigate("/");
+    } else {
+      toast({ title: "Login failed. Please try again." });
+      return;
     }
   };
 
@@ -86,7 +66,7 @@ const SigninForm = () => {
         </p>
       </div>
       <form
-        onSubmit={form.handleSubmit(handleSignIn)}
+        onSubmit={form.handleSubmit(handleSignin)}
         className="flex flex-col gap-5 w-full mt-4"
       >
         <FormField

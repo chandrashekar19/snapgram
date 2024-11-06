@@ -1,0 +1,9 @@
+export { default as Home } from "./pages/home";
+export { default as Profile } from "./pages/profile";
+export { default as UpdateProfile } from "./pages/update-profile";
+export { default as SavedPost } from "./pages/saved";
+export { default as PostDetails } from "./pages/post-details";
+export { default as EditPost } from "./pages/edit-post";
+export { default as AllUsers } from "./pages/all-users";
+export { default as CreatePost } from "./pages/create-post";
+export { default as Explore } from "./pages/explore";
