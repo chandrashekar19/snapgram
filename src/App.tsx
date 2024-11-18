@@ -1,6 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import "./globals.css";
 import SignInForm from "./_auth/sign-in-form";
+import SignUpForm from "./_auth/sign-up-form";
+import AuthLayout from "./_auth/auth-layout";
+import RootLayout from "./_root/root-layout";
+import { Toaster } from "@/components/ui/toaster";
 import {
   AllUsers,
   CreatePost,
@@ -11,11 +15,7 @@ import {
   Profile,
   SavedPost,
   UpdateProfile,
-} from "./_root/pages";
-import SignUpForm from "./_auth/sign-up-form";
-import AuthLayout from "./_auth/auth-layout";
-import RootLayout from "./_root/root-layout";
-import { Toaster } from "@/components/ui/toaster";
+} from "./_root";
 
 const App = () => {
   return (

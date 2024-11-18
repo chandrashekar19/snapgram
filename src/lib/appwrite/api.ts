@@ -8,7 +8,7 @@ import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
 // ============================================================
 
 // ============================== SIGN UP
-export async function createUserAccount(user: INewUser) {
+export const createUserAccount = async (user: INewUser) => {
   try {
     const newAccount = await account.create(
       ID.unique(),
@@ -34,16 +34,16 @@ export async function createUserAccount(user: INewUser) {
     console.log(error);
     return error;
   }
-}
+};
 
 // ============================== SAVE USER TO DB
-export async function saveUserToDB(user: {
+export const saveUserToDB = async (user: {
   accountId: string;
   email: string;
   name: string;
   imageUrl: URL;
   username?: string;
-}) {
+}) => {
   try {
     const newUser = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -56,7 +56,7 @@ export async function saveUserToDB(user: {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // ============================== SIGN IN
 export async function signInAccount(user: { email: string; password: string }) {

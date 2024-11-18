@@ -7,3 +7,4 @@ export { default as EditPost } from "./pages/edit-post";
 export { default as AllUsers } from "./pages/all-users";
 export { default as CreatePost } from "./pages/create-post";
 export { default as Explore } from "./pages/explore";
+export { default as LikedPosts } from "./pages/liked-posts";
